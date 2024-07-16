@@ -1,4 +1,25 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+   compress: true,
+   poweredByHeader: false,
+   devIndicators: {
+      buildActivity: true,
+      buildActivityPosition: 'bottom-right',
+   },
+   logging: {
+      fetches: {
+         fullUrl: true,
+      },
+   },
+   images: {
+      dangerouslyAllowSVG: true,
+      remotePatterns: [
+         {
+            protocol: 'https',
+            hostname: 'cdn.coinranking.com',
+         },
+      ],
+   },
+};
 
 export default nextConfig;

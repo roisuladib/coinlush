@@ -1,3 +1,75 @@
 {
-  "extends": "next/core-web-vitals"
+   "extends": ["next", "prettier"],
+   "plugins": ["import", "sort-exports"],
+   "rules": {
+      "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
+      "indent": ["warn", 3, { "ignoredNodes": ["ConditionalExpression"] }],
+      "quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": false }],
+      "semi": ["error", "always"],
+      "no-unused-vars": [
+         "error",
+         {
+            "vars": "all",
+            // "args": "after-used",
+            // "ignoreRestSiblings": true,
+            "args": "none",
+            "ignoreRestSiblings": false,
+            "argsIgnorePattern": "^_"
+         }
+      ],
+      "sort-imports": [
+         "error",
+         {
+            "ignoreCase": true,
+            "ignoreDeclarationSort": true
+         }
+      ],
+      "import/order": [
+         "error",
+         {
+            "groups": [["external", "builtin"], "internal", ["sibling", "parent"], "index"],
+            "pathGroups": [
+               {
+                  "pattern": "{react,react-dom}",
+                  "group": "external",
+                  "position": "before"
+               },
+               {
+                  "pattern": "{next,next/**}",
+                  "group": "external",
+                  "position": "before"
+               },
+               {
+                  "pattern": "{next-**,next-**/**}",
+                  "group": "external",
+                  "position": "before"
+               },
+               {
+                  "pattern": "@nextui-org/**",
+                  "group": "external",
+                  "position": "before"
+               },
+               {
+                  "pattern": "@react-aria/**",
+                  "group": "external",
+                  "position": "before"
+               },
+               {
+                  "pattern": "@/**",
+                  "group": "internal"
+               },
+               {
+                  "pattern": "@public/**",
+                  "group": "internal"
+               }
+            ],
+            "pathGroupsExcludedImportTypes": ["internal", "react"],
+            "newlines-between": "always",
+            "alphabetize": {
+               "order": "asc",
+               "caseInsensitive": true
+            }
+         }
+      ]
+   }
 }
