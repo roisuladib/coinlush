@@ -9,7 +9,6 @@ import { Button } from '@nextui-org/button';
 import { Link } from '@nextui-org/link';
 
 import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
 
 import { Table, TColumn } from '@/components';
 import { useIsomorphicLayoutEffect } from '@/hooks';
