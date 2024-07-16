@@ -58,17 +58,11 @@ export default function TableMarkets() {
 
    // This useQuery could just as well happen in some deeper
    // child to <Posts>, data will be available immediately either way
-   const { isLoading, isFetching, error, data } = useQuery({
+   const { isLoading, isFetching, data } = useQuery({
       queryKey: ['markets', page],
       queryFn: () => fetchMarkets(page, rowsPerPage),
       placeholderData: keepPreviousData,
    });
-
-   useIsomorphicLayoutEffect(() => {
-      if (error) {
-         toast.error(error.message);
-      }
-   }, [error]);
 
    const prefetch = useCallback(() => {
       queryClient.prefetchQuery({
