@@ -72,7 +72,6 @@ export default function TableMarkets() {
 
    useIsomorphicLayoutEffect(() => {
       if (page) {
-         console.log('RUNNING :>> ');
          prefetch();
       }
    }, [page]);
@@ -134,7 +133,7 @@ export default function TableMarkets() {
                   variant="light"
                   as={Link}
                   size="sm"
-                  href={`/${market.uuid}+${market.name.replace(' ', '').toLowerCase()}-${market.symbol.toLowerCase()}`}>
+                  href={`/${market.uuid}`}>
                   Detail
                </Button>
             );

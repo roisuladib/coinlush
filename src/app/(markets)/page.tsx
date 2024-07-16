@@ -4,11 +4,7 @@ import { fetchMarkets, queryClient } from '@/lib';
 
 import TableMarkets from './_components/table-markets';
 
-export default async function Markets({
-   searchParams,
-}: {
-   searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default async function Markets() {
    await queryClient.prefetchQuery({
       queryKey: ['markets', 0],
       queryFn: () => fetchMarkets(0, 9),

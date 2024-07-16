@@ -6,22 +6,21 @@ import Statistic from './_components/statistic';
 export const dynamic = 'force-dynamic';
 
 export default async function MarketsiD({ params: { id } }: { params: { id: string } }) {
-   const uuid = decodeURIComponent(id).split('+')[0];
    await Promise.all([
       await queryClient.prefetchQuery({
-         queryKey: ['market', uuid],
-         queryFn: () => fetchMarketDetail(uuid),
+         queryKey: ['market', id],
+         queryFn: () => fetchMarketDetail(id),
       }),
       await queryClient.prefetchQuery({
-         queryKey: ['market-history', uuid],
-         queryFn: () => fetchMarketDetailHistories(uuid),
+         queryKey: ['market-history', id],
+         queryFn: () => fetchMarketDetailHistories(id),
       }),
    ]);
 
    return (
       <div className="space-y-4">
-         <Statistic uuid={uuid} />
-         <ChartHistroy uuid={uuid} />
+         <Statistic uuid={id} />
+         <ChartHistroy uuid={id} />
       </div>
    );
 }
