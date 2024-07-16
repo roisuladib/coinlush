@@ -9,7 +9,6 @@ export default async function Markets({
 }: {
    searchParams: { [key: string]: string | string[] | undefined };
 }) {
-   console.log('page :>> ', searchParams.page);
    await queryClient.prefetchQuery({
       queryKey: ['markets', 0],
       queryFn: () => fetchMarkets(0, 9),
