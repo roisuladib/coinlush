@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef } from 'react';
 
 import { Spinner } from '@nextui-org/spinner';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
    CategoryScale,
    Chart,
@@ -27,7 +27,6 @@ const colorDown = (opacity = 1) => `rgba(243, 18, 96, ${opacity})`;
 export default function ChartHistroy({ uuid }: { uuid: string }) {
    const chartRef = useRef<HTMLCanvasElement>(null);
 
-   const queryClient = useQueryClient();
    const { isLoading, isFetching, data } = useQuery({
       queryKey: ['market-history', uuid],
       queryFn: () => fetchMarketDetailHistories(uuid),

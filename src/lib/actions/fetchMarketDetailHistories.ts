@@ -1,5 +1,5 @@
 import { COIN_RANKING_API_HOST, COIN_RANKING_API_KEY, COIN_RANKING_API_URL } from '@/env';
-import { Market, ResponseData } from '@/types';
+import { ResponseData } from '@/types';
 
 export async function fetchMarketDetailHistories(
    id: string,
