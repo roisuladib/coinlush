@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 
 import './globals.css';
 
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Toaster } from 'react-hot-toast';
 
 import { Header, ProgressBar } from '@/components';
@@ -43,6 +44,8 @@ export default function RootLayout({
                </footer>
             </Providers>
             <Toaster />
+
+            <SpeedInsights />
          </body>
       </html>
    );
