@@ -1,6 +1,7 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useCallback, useRef } from 'react';
+import { flushSync } from 'react-dom';
 
 import { useTheme } from 'next-themes';
 
@@ -10,6 +11,7 @@ import { useIsSSR } from '@react-aria/ssr';
 import { VisuallyHidden } from '@react-aria/visually-hidden';
 
 import clsx from 'clsx';
+import useSound from 'use-sound';
 
 import { MoonFilledIcon, SunFilledIcon } from '@/components';
 
@@ -21,10 +23,57 @@ export interface ThemeSwitchProps {
 export const ThemeSwitch: FC<ThemeSwitchProps> = ({ className, classNames }) => {
    const { theme, setTheme } = useTheme();
    const isSSR = useIsSSR();
+   const ref = useRef<HTMLDivElement>(null);
+   const [playLight] = useSound('/sounds/switch-on.mp3');
+   const [playNight] = useSound('/sounds/switch-off.mp3');
 
-   const onChange = () => {
-      theme === 'light' ? setTheme('dark') : setTheme('light');
-   };
+   const handleSetTheme = useCallback(() => {
+      if (theme === 'light') {
+         playNight();
+         setTheme('dark');
+      } else {
+         playLight();
+         setTheme('light');
+      }
+   }, [playLight, playNight, setTheme, theme]);
+
+   const onChange = useCallback(async () => {
+      const isAppearanceTransition =
+         typeof document !== 'undefined' &&
+         !!document.startViewTransition &&
+         !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (!isAppearanceTransition || !ref.current) {
+         handleSetTheme();
+         return;
+      }
+
+      const { top, left, width, height } = ref.current.getBoundingClientRect();
+      const x = left + width / 2;
+      const y = top + height / 2;
+      const right = window.innerWidth - left;
+      const bottom = window.innerHeight - top;
+      const maxRadius = Math.hypot(Math.max(left, right), Math.max(top, bottom));
+
+      await document.startViewTransition(() => {
+         flushSync(() => {
+            handleSetTheme();
+         });
+      }).ready;
+
+      const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${maxRadius}px at ${x}px ${y}px)`];
+      document.documentElement.animate(
+         {
+            clipPath: theme === 'light' ? [...clipPath].reverse() : clipPath,
+         },
+         {
+            duration: 500,
+            easing: 'ease-in',
+            pseudoElement:
+               theme === 'light' ? '::view-transition-old(root)' : '::view-transition-new(root)',
+         },
+      );
+   }, [handleSetTheme, theme]);
 
    const { Component, slots, isSelected, getBaseProps, getInputProps, getWrapperProps } = useSwitch(
       {
@@ -48,6 +97,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({ className, classNames }) => 
          </VisuallyHidden>
          <div
             {...getWrapperProps()}
+            ref={ref}
             className={slots.wrapper({
                class: clsx(
                   [
