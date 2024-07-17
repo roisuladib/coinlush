@@ -1,5 +1,11 @@
+import type { SVGProps } from 'react';
+
 export type Children = {
    children: React.ReactNode;
+};
+
+export type IconSvgProps = SVGProps<SVGSVGElement> & {
+   size?: number;
 };
 
 export type ResponseData<T> = {

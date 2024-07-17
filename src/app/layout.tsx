@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
 import './globals.css';
+
 import { Toaster } from 'react-hot-toast';
 
-import { ProgressBar } from '@/components';
+import { Header, ProgressBar } from '@/components';
 
 import Providers from './providers';
 
@@ -29,9 +30,11 @@ export default function RootLayout({
 }>) {
    return (
       <html lang="en">
-         <body className={`font-sans antialiased ${geistSans.variable} ${geistMono.variable}`}>
+         <body
+            className={`min-h-screen bg-background font-sans antialiased ${geistSans.variable} ${geistMono.variable}`}>
             <ProgressBar />
             <Providers>
+               <Header />
                <main className="flex grow flex-col">
                   <div className="mx-auto w-full max-w-7xl px-10">{children}</div>
                </main>

@@ -1,4 +1,3 @@
-import { COIN_RANKING_API_HOST, COIN_RANKING_API_KEY, COIN_RANKING_API_URL } from '@/env';
 import { MarketDetail } from '@/types';
 
 export async function fetchMarketDetail(
@@ -7,13 +6,7 @@ export async function fetchMarketDetail(
    referenceCurrencyUuid = 'ETQIOVR_rqox',
 ) {
    const res = await fetch(
-      `${COIN_RANKING_API_URL}/coin/${id}?referenceCurrencyUuid=${referenceCurrencyUuid}&timePeriod=${timePeriode}`,
-      {
-         headers: {
-            'x-rapidapi-key': COIN_RANKING_API_KEY,
-            'x-rapidapi-host': COIN_RANKING_API_HOST,
-         },
-      },
+      `/api/coins/${id}?referenceCurrencyUuid=${referenceCurrencyUuid}&timePeriod=${timePeriode}`,
    );
    const data = await res.json();
 
