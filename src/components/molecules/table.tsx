@@ -86,6 +86,7 @@ export function Table<T>({
    return (
       <TableNextUI
          aria-label={ariaLabel || 'Table'}
+         selectionMode="single"
          sortDescriptor={sortDescriptor}
          onSortChange={setSortDescriptor}
          bottomContent={bottomContent}>
@@ -111,7 +112,13 @@ export function Table<T>({
          </TableHeader>
          <TableBody
             items={items.map((e, i) => ({ ...e, _index: i })) ?? []}
-            loadingContent={<Spinner size="lg" />}
+            loadingContent={
+               <Spinner
+                  size="lg"
+                  label="Fetching..."
+                  labelColor="primary"
+               />
+            }
             loadingState={loadingState}
             emptyContent={'Data not found'}>
             {item => (
@@ -124,7 +131,7 @@ export function Table<T>({
                      return (
                         <TableCell
                            className={cn(
-                              'first:pl-0 last:pr-0 last:text-right',
+                              'last:text-right',
                               // shouldFontCurrency && 'font-currency',
                               shouldAlign && `text-${shouldAlign}`,
                               className,

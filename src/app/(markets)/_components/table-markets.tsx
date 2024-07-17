@@ -130,7 +130,7 @@ export default function TableMarkets() {
             return (
                <Button
                   color="primary"
-                  variant="light"
+                  variant="flat"
                   as={Link}
                   size="sm"
                   href={`/${market.uuid}`}>
