@@ -111,7 +111,7 @@ export function Table<T>({
          </TableHeader>
          <TableBody
             items={items.map((e, i) => ({ ...e, _index: i })) ?? []}
-            loadingContent={<Spinner />}
+            loadingContent={<Spinner size="lg" />}
             loadingState={loadingState}
             emptyContent={'Data not found'}>
             {item => (
