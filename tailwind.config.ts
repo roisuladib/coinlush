@@ -13,6 +13,10 @@ const config: Config = {
             sans: ['var(--font-geist-sans)'],
             mono: ['var(--font-geist-mono)'],
          },
+         spacing: {
+            18: '4.5rem',
+            19: '4.75rem',
+         },
       },
    },
    darkMode: 'class',

@@ -1,7 +1,7 @@
+import '@/styles/globals.css';
+
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
-
-import './globals.css';
 
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Toaster } from 'react-hot-toast';
@@ -102,7 +102,7 @@ export default function RootLayout({
             <ProgressBar />
             <Providers>
                <Header />
-               <main className="flex grow flex-col">
+               <main className="flex grow flex-col py-14">
                   <div className="mx-auto w-full max-w-7xl px-10">{children}</div>
                </main>
                <footer className="flex h-16 w-full items-center justify-center">

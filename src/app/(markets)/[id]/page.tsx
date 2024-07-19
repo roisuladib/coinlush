@@ -1,11 +1,13 @@
-import { fetchMarketDetail, fetchMarketDetailHistories, queryClient } from '@/lib';
+import { fetchMarketDetail, fetchMarketDetailHistories, getQueryClient } from '@/lib';
 
 import ChartHistroy from './_components/chart-histroy';
 import Statistic from './_components/statistic';
 
 export const dynamic = 'force-dynamic';
 
-export default async function MarketsiD({ params: { id } }: { params: { id: string } }) {
+const queryClient = getQueryClient();
+
+export default async function MarketsDetail({ params: { id } }: { params: { id: string } }) {
    await Promise.all([
       await queryClient.prefetchQuery({
          queryKey: ['market', id],

@@ -1,6 +1,9 @@
+'use clien';
+
 import NextLink from 'next/link';
 
 import { Input } from '@nextui-org/input';
+import { Link } from '@nextui-org/link';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@nextui-org/navbar';
 
 import { cn } from '@/utils';
@@ -34,26 +37,21 @@ export const Header = () => {
    return (
       <Navbar
          maxWidth="xl"
-         position="sticky"
+         shouldHideOnScroll
          isBordered
          classNames={{ wrapper: cn('px-10') }}>
-         <NavbarContent
-            className="basis-1/5 sm:basis-full"
-            justify="start">
-            <NavbarBrand
-               as="li"
-               className="max-w-fit gap-3">
-               <NextLink
-                  className="flex items-center justify-start gap-1"
-                  href="/">
-                  <p className="font-bold text-inherit">Coinlush</p>
-               </NextLink>
-            </NavbarBrand>
-         </NavbarContent>
-
-         <NavbarContent
-            className="hidden basis-1/5 sm:flex sm:basis-full"
-            justify="end">
+         <NavbarBrand className="max-w-fit gap-3">
+            <NextLink
+               className="flex items-center justify-start gap-1 font-bold"
+               href="/">
+               <p className="text-2xl text-primary">CL</p>
+               <p> Coinlush</p>
+            </NextLink>
+         </NavbarBrand>
+         <NavbarContent justify="end">
+            <NavbarItem isActive>
+               <Link href="/">Coins</Link>
+            </NavbarItem>
             <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
             <NavbarItem>
                <ThemeSwitch />

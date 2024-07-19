@@ -1,20 +1,29 @@
 /* eslint-disable indent */
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import Image from 'next/image';
 
 import { Button } from '@nextui-org/button';
+import { Chip } from '@nextui-org/chip';
 import { Link } from '@nextui-org/link';
+import { Select, SelectItem } from '@nextui-org/select';
+import { Tooltip } from '@nextui-org/tooltip';
 
-import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+   FetchQueryOptions,
+   keepPreviousData,
+   useQuery,
+   useQueryClient,
+} from '@tanstack/react-query';
 
-import { Table, TColumn } from '@/components';
-import { useIsomorphicLayoutEffect } from '@/hooks';
-import { fetchMarkets } from '@/lib';
+import { LineChart, Table, TColumn } from '@/components';
+import { ROWS_PER_PAGE } from '@/constants';
+import { fetchCoins, rankings, timePeriods } from '@/lib';
+import type { Selection } from '@/types';
 import { Market } from '@/types';
-import { formatCurrency } from '@/utils';
+import { cn, formatCurrency } from '@/utils';
 
 import ChartSparkline from './chart-sparkline';
 
@@ -49,32 +58,60 @@ const columns: TColumn[] = [
    },
 ];
 
-const rowsPerPage = 9;
+const limits = [ROWS_PER_PAGE, 10, 15, 20, 50, 100] as const;
 
 export default function TableMarkets() {
    const queryClient = useQueryClient();
+   const [ranking, setRanking] = useState<Selection>(new Set([`${rankings[1]}`]));
+   const [limit, setLimit] = useState<Selection>(new Set([`${ROWS_PER_PAGE}`]));
+   const [timePeroid, setTimePeriod] = useState<Iterable<(typeof timePeriods)[number]>>(
+      new Set(['24h']),
+   );
    const [page, setPage] = useState(0);
+
+   const getTimePeriod = useMemo(
+      () => new Set(timePeroid).values().next().value as (typeof timePeriods)[number],
+      [timePeroid],
+   );
+   const getRanking = useMemo(
+      () => new Set(ranking).values().next().value as (typeof rankings)[number],
+      [ranking],
+   );
+   const getLimit = useMemo(() => new Set(limit).values().next().value as number, [limit]);
+
+   const fetchQueryOptions = useMemo<FetchQueryOptions<Market>>(
+      () => ({
+         queryKey: ['markets', page, getLimit, getTimePeriod, getRanking],
+         queryFn: () =>
+            fetchCoins({
+               limit: getLimit,
+               offset: page * getLimit,
+               orderBy: getRanking,
+               orderDirection: 'desc',
+               referenceCurrencyUuid: 'ETQIOVR_rqox',
+               timePeriod: getTimePeriod,
+               tiers: [1, 2],
+            }),
+      }),
+      [page, getLimit, getTimePeriod, getRanking],
+   );
 
    // This useQuery could just as well happen in some deeper
    // child to <Posts>, data will be available immediately either way
-   const { isLoading, isFetching, data } = useQuery({
-      queryKey: ['markets', page],
-      queryFn: () => fetchMarkets(page, rowsPerPage),
+   const { isLoading, isFetching, isRefetching, data, refetch } = useQuery({
+      ...fetchQueryOptions,
       placeholderData: keepPreviousData,
    });
 
    const prefetch = useCallback(() => {
-      queryClient.prefetchQuery({
-         queryKey: ['markets', page],
-         queryFn: () => fetchMarkets(page, rowsPerPage),
-      });
-   }, [page, queryClient]);
+      queryClient.prefetchQuery(fetchQueryOptions);
+   }, [fetchQueryOptions, queryClient]);
 
-   useIsomorphicLayoutEffect(() => {
-      if (page) {
-         prefetch();
+   useEffect(() => {
+      if (getLimit || getTimePeriod) {
+         refetch();
       }
-   }, [page]);
+   }, [getLimit, getTimePeriod, refetch]);
 
    const renderCell = useCallback((market: Market['data']['coins'][number], key: React.Key) => {
       const cellValue = market[key as keyof Market['data']['coins'][number]] as string;
@@ -83,7 +120,7 @@ export default function TableMarkets() {
          case 'name':
             return (
                <div className="flex items-center gap-2">
-                  <div className="relative size-7 overflow-hidden rounded-full">
+                  <div className="relative size-7 overflow-hidden">
                      <Image
                         src={market.iconUrl}
                         fill
@@ -102,21 +139,24 @@ export default function TableMarkets() {
             );
 
          case 'price':
-            return formatCurrency(cellValue);
+            return formatCurrency(+cellValue);
 
          case 'change':
             const isUp = +cellValue >= 0;
             return (
-               <span className={isUp ? 'text-success' : 'text-danger'}>
+               <Chip
+                  color={isUp ? 'success' : 'danger'}
+                  size="sm"
+                  variant="flat">
                   {isUp ? `+${cellValue}` : cellValue}%
-               </span>
+               </Chip>
             );
 
          case '24hVolume':
-            return formatCurrency(cellValue);
+            return formatCurrency(+cellValue);
 
          case 'marketCap':
-            return formatCurrency(cellValue);
+            return formatCurrency(+cellValue);
 
          case 'chart':
             return (
@@ -128,14 +168,19 @@ export default function TableMarkets() {
 
          case 'detail':
             return (
-               <Button
-                  color="primary"
-                  variant="flat"
-                  as={Link}
-                  size="sm"
-                  href={`/${market.uuid}`}>
-                  Detail
-               </Button>
+               <Tooltip
+                  content="Details"
+                  showArrow>
+                  <Button
+                     color="primary"
+                     variant="flat"
+                     isIconOnly
+                     as={Link}
+                     size="sm"
+                     href={`/${market.uuid}`}>
+                     <LineChart className="size-5" />
+                  </Button>
+               </Tooltip>
             );
 
          default:
@@ -144,61 +189,66 @@ export default function TableMarkets() {
    }, []);
 
    return (
-      <>
-         <Table
-            ariaLabel="Markets"
-            columns={columns}
-            items={data?.data.coins || []}
-            renderCell={renderCell}
-            isLoading={isLoading || isFetching}
-            pagination={{
-               page: page + 1,
-               total: 40060,
-               setPage: page => setPage(page - 1),
-               prefetch: prefetch,
-               offsetPage: 1,
-            }}
-         />
-         {/* <Table
-            aria-label="Markets"
-            bottomContent={
-               pages > 0 ? (
-                  <div className="flex w-full justify-center">
-                     <Pagination
-                        isCompact
-                        showControls
-                        showShadow
-                        color="primary"
-                        page={page + 1}
-                        total={pages}
-                        onChange={page => setPage(page - 1)}
-                     />
-                  </div>
-               ) : null
-            }
-            sortDescriptor={sortDescriptor}
-            onSortChange={setSortDescriptor}>
-            <TableHeader columns={columns}>
-               {column => (
-                  <TableColumn
-                     key={column.key}
-                     allowsSorting={column.sortable}>
-                     {column.label}
-                  </TableColumn>
-               )}
-            </TableHeader>
-            <TableBody
-               items={data?.data.coins ?? []}
-               loadingContent={<Spinner />}
-               loadingState={loadingState}
-               emptyContent={'No markets to display.'}>
-               {item => (
-                  <TableRow key={item.uuid}>
-                     {columnKey => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
-                  </TableRow>
-               )}
-            </TableBody>
-         </Table> */}
-      </>
+      <Table
+         ariaLabel="Markets"
+         columns={columns}
+         items={data?.data.coins || []}
+         renderCell={renderCell}
+         isLoading={isLoading || isFetching || isRefetching}
+         bottomContent={
+            <Select
+               label="Limit"
+               labelPlacement="outside"
+               size="sm"
+               items={limits.map(String).map(e => ({ key: e, label: e }))}
+               selectedKeys={limit}
+               className="max-w-20"
+               onSelectionChange={setLimit}>
+               {e => <SelectItem key={e.key}>{e.label}</SelectItem>}
+            </Select>
+         }
+         topContent={
+            <div className="flex items-center justify-between">
+               <div className="inline-flex w-full justify-end gap-3">
+                  <Select
+                     label="Ranking"
+                     labelPlacement="outside"
+                     items={rankings.map(e => ({ key: e, label: e }))}
+                     size="sm"
+                     selectedKeys={ranking}
+                     onSelectionChange={setRanking}
+                     className="max-w-40"
+                     classNames={{ value: cn('capitalize') }}>
+                     {e => (
+                        <SelectItem
+                           className="capitalize"
+                           key={e.key}>
+                           {e.label}
+                        </SelectItem>
+                     )}
+                  </Select>
+                  <Select
+                     label="Time period"
+                     labelPlacement="outside"
+                     size="sm"
+                     selectedKeys={timePeroid}
+                     onSelectionChange={setTimePeriod}
+                     className="max-w-20">
+                     {timePeriods.map(e => (
+                        <SelectItem key={e}>{e}</SelectItem>
+                     ))}
+                  </Select>
+               </div>
+            </div>
+         }
+         pagination={{
+            page: page + 1,
+            total: data?.data.stats.total!,
+            setPage: page => setPage(page - 1),
+            prefetch: prefetch,
+            rowsPerPage: getLimit,
+            offsetPage: 1,
+         }}
+      />
    );
 }

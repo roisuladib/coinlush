@@ -1,3 +1,3 @@
 export * from './actions';
-export * from './queryClient';
+export * from './getQueryClient';
 export * from './request';

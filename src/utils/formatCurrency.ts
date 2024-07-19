@@ -135,11 +135,13 @@ const locales = [
    { code: 'Cy-uz-UZ', name: 'Uzbek (Cyrillic) - Uzbekistan' },
    { code: 'Lt-uz-UZ', name: 'Uzbek (Latin) - Uzbekistan' },
    { code: 'vi-VN', name: 'Vietnamese - Vietnam' },
-];
+] as const;
+
+export type Locale = (typeof locales)[number]['code'];
 
 export function formatCurrency(
    value: number | string,
-   locale: (typeof locales)[number]['code'] = 'id-ID',
+   locale: Locale = 'id-ID',
    currencyCode = 'IDR',
 ) {
    if (!value) return '';

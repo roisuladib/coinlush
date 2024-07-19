@@ -8,6 +8,9 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
    size?: number;
 };
 
+export type Key = string | number;
+export type Selection = 'all' | Set<Key>;
+
 export type ResponseData<T> = {
    status: string;
    data: T;

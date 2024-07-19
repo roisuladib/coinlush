@@ -13,6 +13,7 @@ import {
    TableColumn,
    TableHeader,
    Table as TableNextUI,
+   TableProps,
    TableRow,
 } from '@nextui-org/table';
 
@@ -28,7 +29,7 @@ export type TColumn = {
    shouldFontCurrency?: boolean;
 };
 
-interface Props<T> {
+interface Props<T> extends TableProps {
    ariaLabel?: string;
    columns: TColumn[];
    items: T[];
@@ -51,6 +52,8 @@ export function Table<T>({
    ariaLabel,
    isLoading,
    pagination,
+   bottomContent: bottomContentLeft,
+   ...props
 }: Props<T>) {
    const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({});
    const page = pagination?.page || 0;
@@ -59,20 +62,24 @@ export function Table<T>({
    const pages = useMemo(() => Math.ceil(pagination?.total! / limit), [limit, pagination?.total]);
 
    const bottomContent = useMemo(
-      () =>
-         pages > 0 ? (
-            <div className="flex w-full justify-end">
-               <Pagination
-                  showControls
-                  page={page}
-                  total={pages}
-                  size="sm"
-                  onChange={pagination!.setPage}
-                  isDisabled={isLoading}
-               />
-            </div>
-         ) : null,
-      [isLoading, page, pages, pagination],
+      () => (
+         <div className="flex items-center justify-between">
+            {bottomContentLeft}
+            {pages > 0 ? (
+               <div className="flex w-full justify-end">
+                  <Pagination
+                     showControls
+                     page={page}
+                     total={pages}
+                     size="sm"
+                     onChange={pagination!.setPage}
+                     isDisabled={isLoading}
+                  />
+               </div>
+            ) : null}
+         </div>
+      ),
+      [bottomContentLeft, isLoading, page, pages, pagination],
    );
 
    const loadingState = useMemo(() => (isLoading ? 'loading' : 'idle'), [isLoading]);
@@ -86,10 +93,11 @@ export function Table<T>({
    return (
       <TableNextUI
          aria-label={ariaLabel || 'Table'}
-         selectionMode="single"
          sortDescriptor={sortDescriptor}
          onSortChange={setSortDescriptor}
-         bottomContent={bottomContent}>
+         bottomContent={bottomContent}
+         classNames={{ tbody: cn('divide-y-[0.5px] divide-divider') }}
+         {...props}>
          <TableHeader>
             {columns.map((column, index) => (
                <TableColumn
