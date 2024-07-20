@@ -6,7 +6,7 @@ import localFont from 'next/font/local';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Toaster } from 'react-hot-toast';
 
-import { Header, ProgressBar } from '@/components';
+import { AdBanner, Header, ProgressBar } from '@/components';
 import { Adsense } from '@/components';
 import { siteConfig } from '@/configs';
 
@@ -98,14 +98,23 @@ export default function RootLayout({
 }>) {
    return (
       <html lang="en">
-         <head>
-            <Adsense pid="1341034655058100" />
-         </head>
+         {process.env.NODE_ENV === 'production' && (
+            <head>
+               <Adsense pid="1341034655058100" />
+            </head>
+         )}
          <body
             className={`min-h-screen bg-background font-sans antialiased ${geistSans.variable} ${geistMono.variable}`}>
             <ProgressBar />
             <Providers>
                <Header />
+               {process.env.NODE_ENV === 'production' && (
+                  <AdBanner
+                     dataAdFormat="auto"
+                     dataFullWidthResponsive
+                     dataAdSlot="8780783500"
+                  />
+               )}
                <main className="flex grow flex-col py-14">
                   <div className="mx-auto w-full max-w-7xl px-10">{children}</div>
                </main>
