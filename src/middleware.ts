@@ -12,6 +12,10 @@ export function middleware(req: NextRequest) {
    res.headers.append('Access-Control-Allow-Methods', 'GET');
    res.headers.append('Cross-Origin-Opener-Policy', 'same-origin');
    res.headers.append('Referrer-Policy', 'strict-origin-when-cross-origin');
+   // res.headers.append(
+   //    'Access-Control-Allow-Headers',
+   //    'Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date',
+   // );
 
    return res;
 }

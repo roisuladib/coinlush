@@ -1,3 +1,5 @@
+import ky from 'ky';
+
 import { Market } from '@/types';
 import { buildQueryString } from '@/utils';
 
@@ -171,7 +173,7 @@ export type QueryCoin = {
 };
 
 export async function fetchCoins(query?: QueryCoin) {
-   const res = await fetch(`/api/coins?${buildQueryString(query)}`);
+   const res = await ky(`/api/coins?${buildQueryString(query)}`);
    const data = await res.json();
 
    return data as Market;
