@@ -111,11 +111,13 @@ export default function RootLayout({
                <main className="flex grow flex-col py-14">
                   <div className="mx-auto w-full max-w-7xl px-10">
                      {process.env.NODE_ENV === 'production' && (
-                        <AdBanner
-                           dataAdFormat="auto"
-                           dataFullWidthResponsive
-                           dataAdSlot="8780783500"
-                        />
+                        <div className="hidden">
+                           <AdBanner
+                              dataAdFormat="auto"
+                              dataFullWidthResponsive
+                              dataAdSlot="8780783500"
+                           />
+                        </div>
                      )}
                      {children}
                   </div>
