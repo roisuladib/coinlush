@@ -2,8 +2,6 @@
 
 import { useEffect } from 'react';
 
-import { GOOGLE_ADS_PUB } from '@/env';
-
 type Props = {
    dataAdSlot: string;
    dataAdFormat: string;
@@ -23,7 +21,7 @@ export function AdBanner({ dataAdSlot, dataAdFormat, dataFullWidthResponsive }: 
       <ins
          className="adsbygoogle"
          style={{ display: 'block' }}
-         data-ad-client={`ca-pub-${GOOGLE_ADS_PUB}`}
+         data-ad-client={'ca-pub-1341034655058100'}
          data-ad-slot={dataAdSlot}
          data-ad-format={dataAdFormat}
          data-full-width-responsive={dataFullWidthResponsive.toString()}
