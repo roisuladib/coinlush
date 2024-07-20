@@ -108,15 +108,17 @@ export default function RootLayout({
             <ProgressBar />
             <Providers>
                <Header />
-               {process.env.NODE_ENV === 'production' && (
-                  <AdBanner
-                     dataAdFormat="auto"
-                     dataFullWidthResponsive
-                     dataAdSlot="8780783500"
-                  />
-               )}
                <main className="flex grow flex-col py-14">
-                  <div className="mx-auto w-full max-w-7xl px-10">{children}</div>
+                  <div className="mx-auto w-full max-w-7xl px-10">
+                     {process.env.NODE_ENV === 'production' && (
+                        <AdBanner
+                           dataAdFormat="auto"
+                           dataFullWidthResponsive
+                           dataAdSlot="8780783500"
+                        />
+                     )}
+                     {children}
+                  </div>
                </main>
                <footer className="flex h-16 w-full items-center justify-center">
                   Design and Built with ❤️ by Roisuladib {new Date().getFullYear()}
