@@ -1,6 +1,8 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
+import { AdBanner } from '@/components/atoms/ad-banner';
 import { ROWS_PER_PAGE } from '@/constants';
+import { GOOGLE_ADS_PUB } from '@/env';
 import { fetchCoins, getQueryClient } from '@/lib';
 
 import TableMarkets from './_components/table-markets';
@@ -25,6 +27,11 @@ export default async function Markets() {
 
    return (
       <>
+         <AdBanner
+            dataAdFormat="auto"
+            dataFullWidthResponsive={true}
+            dataAdSlot={GOOGLE_ADS_PUB}
+         />
          <section className="space-y-6">
             <h1 className="text-xl font-semibold md:text-3xl">Top 20 cryptocurrencies</h1>
             {/* // Neat! Serialization is now as easy as passing props.

@@ -7,6 +7,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Toaster } from 'react-hot-toast';
 
 import { Header, ProgressBar } from '@/components';
+import { Adsense } from '@/components';
 import { siteConfig } from '@/configs';
 
 import Providers from './providers';
@@ -97,6 +98,9 @@ export default function RootLayout({
 }>) {
    return (
       <html lang="en">
+         <head>
+            <Adsense pid="1341034655058100" />
+         </head>
          <body
             className={`min-h-screen bg-background font-sans antialiased ${geistSans.variable} ${geistMono.variable}`}>
             <ProgressBar />
