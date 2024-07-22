@@ -22,6 +22,10 @@ const nextConfig = {
             protocol: 'https',
             hostname: 'pagead2.googlesyndication.com',
          },
+         {
+            protocol: 'https',
+            hostname: 'googleads.g.doubleclick.net',
+         },
       ],
    },
    experimental: {
