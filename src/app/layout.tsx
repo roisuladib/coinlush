@@ -109,8 +109,10 @@ export default function RootLayout({
             <Providers>
                <Header />
                <main className="flex grow flex-col py-14">
-                  {process.env.NODE_ENV === 'production' && <AdBanner />}
-                  <div className="mx-auto w-full max-w-7xl px-10">{children}</div>
+                  <div className="mx-auto w-full max-w-7xl px-10">
+                     {process.env.NODE_ENV === 'production' && <AdBanner />}
+                     {children}
+                  </div>
                </main>
                <footer className="flex h-16 w-full items-center justify-center">
                   Design and Built with ❤️ by Roisuladib {new Date().getFullYear()}
