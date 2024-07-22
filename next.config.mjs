@@ -18,14 +18,6 @@ const nextConfig = {
             protocol: 'https',
             hostname: 'cdn.coinranking.com',
          },
-         {
-            protocol: 'https',
-            hostname: 'pagead2.googlesyndication.com',
-         },
-         {
-            protocol: 'https',
-            hostname: 'googleads.g.doubleclick.net',
-         },
       ],
    },
    experimental: {
