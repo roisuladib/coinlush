@@ -6,7 +6,7 @@ import localFont from 'next/font/local';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Toaster } from 'react-hot-toast';
 
-import { Header, ProgressBar } from '@/components';
+import { AdBanner, Header, ProgressBar } from '@/components';
 import { Adsense } from '@/components';
 import { siteConfig } from '@/configs';
 
@@ -100,7 +100,7 @@ export default function RootLayout({
       <html lang="en">
          {process.env.NODE_ENV === 'production' && (
             <head>
-               <Adsense pid="1341034655058100" />
+               <Adsense />
             </head>
          )}
          <body
@@ -108,6 +108,7 @@ export default function RootLayout({
             <ProgressBar />
             <Providers>
                <Header />
+               {process.env.NODE_ENV === 'production' && <AdBanner />}
                <main className="flex grow flex-col py-14">
                   <div className="mx-auto w-full max-w-7xl px-10">{children}</div>
                </main>

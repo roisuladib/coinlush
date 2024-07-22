@@ -1,10 +1,12 @@
 import Script from 'next/script';
 
-export function Adsense({ pid }: { pid: string }) {
+import { GOOGLE_ADS_PUB } from '@/env';
+
+export function Adsense() {
    return (
       <Script
          async
-         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${pid}`}
+         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${GOOGLE_ADS_PUB}`}
          crossOrigin="anonymous"
          strategy="afterInteractive"
       />

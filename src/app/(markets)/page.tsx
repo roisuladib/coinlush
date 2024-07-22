@@ -1,6 +1,5 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
-import { AdBanner } from '@/components';
 import { ROWS_PER_PAGE } from '@/constants';
 import { fetchCoins, getQueryClient } from '@/lib';
 
@@ -26,13 +25,6 @@ export default async function Markets() {
 
    return (
       <>
-         {process.env.NODE_ENV === 'production' && (
-            <AdBanner
-               dataAdFormat="auto"
-               dataFullWidthResponsive
-               dataAdSlot="8780783500"
-            />
-         )}
          <section className="space-y-6">
             <h1 className="text-xl font-semibold md:text-3xl">Top 20 cryptocurrencies</h1>
             {/* // Neat! Serialization is now as easy as passing props.
