@@ -108,8 +108,8 @@ export default function RootLayout({
             <ProgressBar />
             <Providers>
                <Header />
-               {process.env.NODE_ENV === 'production' && <AdBanner />}
                <main className="flex grow flex-col py-14">
+                  {process.env.NODE_ENV === 'production' && <AdBanner />}
                   <div className="mx-auto w-full max-w-7xl px-10">{children}</div>
                </main>
                <footer className="flex h-16 w-full items-center justify-center">
