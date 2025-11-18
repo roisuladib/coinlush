@@ -70,6 +70,7 @@ export async function GET(req: NextRequest, ctx: RouteContext<'/api/[...all]'>) 
 function getCacheTime(endpoint: string): number {
   if (endpoint.includes('stats')) return 300;
   if (endpoint.includes('history')) return 180;
+  if (endpoint.includes('reference-currencies')) return 86_400;
   if (endpoint.includes('coins') || endpoint.includes('coin/')) return 60;
   return 60;
 }
@@ -83,7 +84,7 @@ function isValidEndpoint(endpoint: string): boolean {
     'exchange/',
     'markets',
     'market/',
-    'search-suggestions',
+    'reference-currencies',
   ];
 
   return allowedPrefixes.some(prefix => endpoint.startsWith(prefix));

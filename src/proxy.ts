@@ -2,27 +2,53 @@ import type { NextRequest } from 'next/server';
 
 import { NextResponse } from 'next/server';
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+import { getCurrency } from 'locale-currency';
 
-export function proxy(req: NextRequest) {
-  // retrieve the current response
-  const res = NextResponse.next();
+const PROD_URL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null;
 
-  // add the CORS headers to the response
-  res.headers.append('Access-Control-Allow-Credentials', 'true');
-  res.headers.append('Access-Control-Allow-Origin', isDevelopment ? '*' : req.nextUrl.origin);
-  res.headers.append('Access-Control-Allow-Methods', 'GET');
-  res.headers.append('Cross-Origin-Opener-Policy', 'same-origin');
-  res.headers.append('Referrer-Policy', 'strict-origin-when-cross-origin');
-  // res.headers.append(
-  //    'Access-Control-Allow-Headers',
-  //    'Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date',
-  // );
+const allowedOrigins: string[] = [];
 
-  return res;
+if (process.env.NODE_ENV === 'production' && PROD_URL) {
+  allowedOrigins.push(PROD_URL);
 }
 
-// specify the path regex to apply the middleware to
-export const config = {
-  matcher: '/api/:path*',
-};
+export default function proxy(request: NextRequest) {
+  const origin = request.headers.get('origin') ?? '';
+  const isAllowed = allowedOrigins.includes(origin);
+
+  const locale = request.headers.get('x-vercel-ip-country') || 'US';
+  const currency = getCurrency(locale) || 'USD';
+
+  // Preflight
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': isAllowed ? origin : '',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Access-Token',
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Max-Age': '86400',
+      },
+    });
+  }
+
+  // Normal response
+  const response = NextResponse.next();
+
+  response.cookies.set({
+    name: 'currency',
+    value: currency,
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 180,
+    sameSite: 'strict',
+    secure: true
+  })
+
+  if (isAllowed) {
+    response.headers.set('Access-Control-Allow-Origin', origin);
+    response.headers.set('Access-Control-Allow-Credentials', 'true');
+  }
+
+  return response;
+}
