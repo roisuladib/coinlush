@@ -60,6 +60,8 @@
               ":BLANK_LINE:",
               ":NODE:",
               ":BLANK_LINE:",
+              "react",
+              "react-dom",
               "next/**",
               ":BLANK_LINE:",
               "@heroui/**",

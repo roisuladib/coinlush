@@ -3,6 +3,7 @@
 import type { Market, Selection } from '^/types';
 import type { FetchQueryOptions } from '@tanstack/react-query';
 
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 
 import { Button } from '@heroui/button';
@@ -13,7 +14,6 @@ import { cn } from '@heroui/theme';
 import { Tooltip } from '@heroui/tooltip';
 
 import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import ChartSparkline from './chart-sparkline';
 import { LineChart, Table, type TColumn } from '^/components';
