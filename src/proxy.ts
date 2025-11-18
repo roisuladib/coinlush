@@ -38,7 +38,6 @@ export default function proxy(request: NextRequest) {
 
   response.headers.set('x-currency', currency);
 
-
   if (isAllowed) {
     response.headers.set('Access-Control-Allow-Origin', origin);
     response.headers.set('Access-Control-Allow-Credentials', 'true');

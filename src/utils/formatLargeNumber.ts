@@ -1,6 +1,6 @@
-import { formatCurrency, Locale } from './formatCurrency';
+import { formatCurrency } from './formatCurrency';
 
-export function formatLargeNumber(value: number, locale?: Locale, currencyCode?: string) {
+export function formatLargeNumber(value: number, locale?: string, currency?: string) {
   const suffixes = [
     '',
     'juta',
@@ -16,7 +16,7 @@ export function formatLargeNumber(value: number, locale?: Locale, currencyCode?:
   ];
   const suffixIndex = Math.floor(Math.log10(Math.abs(value)) / 3); // Tidak perlu dikurangi 1
 
-  let scaledAmount = value / Math.pow(1000, suffixIndex);
+  let scaledAmount = value / 1000 ** suffixIndex;
 
   // Penanganan khusus untuk angka di bawah 1
   if (value < 1_000_000) {

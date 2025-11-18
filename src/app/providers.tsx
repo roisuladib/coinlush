@@ -11,6 +11,8 @@ import { isServer, QueryClient, QueryClientProvider } from '@tanstack/react-quer
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from 'next-themes';
 
+import CurrencyProvider from './currency-provider';
+
 interface Props extends Children {
   currency: string;
   themeProps?: Omit<ThemeProviderProps, 'children'>;
@@ -54,15 +56,16 @@ export default function Providers({ children, currency, themeProps }: Props) {
   const queryClient = getQueryClient();
   const router = useRouter();
 
-  console.log('currency :>> ', currency);
-
   return (
     <QueryClientProvider client={queryClient}>
       <HeroUIProvider
         className="relative flex h-screen flex-col"
         navigate={path => router.push(path)}>
         <ToastProvider placement="top-center" />
-        <ThemeProvider {...themeProps}>{children}</ThemeProvider>
+        <ThemeProvider {...themeProps}>
+          <CurrencyProvider currency={currency} />
+          {children}
+        </ThemeProvider>
       </HeroUIProvider>
       <ReactQueryDevtools />
     </QueryClientProvider>

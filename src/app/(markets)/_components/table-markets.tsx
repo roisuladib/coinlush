@@ -229,7 +229,7 @@ export default function TableMarkets() {
       }
       pagination={{
         page: page + 1,
-        total: data?.data.stats.total!,
+        total: data?.data.stats.total || 0,
         setPage: page => setPage(page - 1),
         prefetch: prefetch,
         rowsPerPage: getLimit,
