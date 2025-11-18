@@ -77,6 +77,9 @@ importers:
       framer-motion:
         specifier: 12.23.24
         version: 12.23.24(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      locale-currency:
+        specifier: ^1.0.0
+        version: 1.0.0
       next:
         specifier: ^16.0.3
         version: 16.0.3(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -1360,6 +1363,10 @@ packages:
   lightningcss@1.30.2:
     resolution: {integrity: sha512-utfs7Pr5uJyyvDETitgsaqSyjCb2qNRAtuqUeWIAKztsOYdcACf2KtARYXg2pSvhkt+9NfoaNY7fxjl6nuMjIQ==}
     engines: {node: '>= 12.0.0'}
+
+  locale-currency@1.0.0:
+    resolution: {integrity: sha512-OPw/KpjqAQdk36fbBHzJxPVpFx7DGU4jFYjmJoinkvbgS/QeKtsykiXszgS/EB458eieVppo/gbP1CbtJN4E9g==}
+    engines: {node: '>=14.0.0'}
 
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
@@ -3008,6 +3015,8 @@ snapshots:
       lightningcss-linux-x64-musl: 1.30.2
       lightningcss-win32-arm64-msvc: 1.30.2
       lightningcss-win32-x64-msvc: 1.30.2
+
+  locale-currency@1.0.0: {}
 
   magic-string@0.30.21:
     dependencies:
