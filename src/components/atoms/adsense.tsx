@@ -1,14 +1,14 @@
 import Script from 'next/script';
 
-import { GOOGLE_ADS_PUB } from '@/env';
+import { GOOGLE_ADS_PUB } from '^/constants';
 
 export function Adsense() {
-   return (
-      <Script
-         async
-         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${GOOGLE_ADS_PUB}`}
-         crossOrigin="anonymous"
-         strategy="afterInteractive"
-      />
-   );
+  return (
+    <Script
+      async
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${GOOGLE_ADS_PUB}`}
+      crossOrigin="anonymous"
+      strategy="afterInteractive"
+    />
+  );
 }

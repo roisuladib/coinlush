@@ -1,156 +1,153 @@
-/* eslint-disable indent */
 'use client';
+
+import { Pagination } from '@heroui/pagination';
+import { Spinner } from '@heroui/spinner';
+import {
+  getKeyValue,
+  type SortDescriptor,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  Table as TableNextUI,
+  type TableProps,
+  TableRow,
+} from '@heroui/table';
+import { cn } from '@heroui/theme';
 
 import { useMemo, useState } from 'react';
 
-import { Pagination } from '@nextui-org/pagination';
-import { Spinner } from '@nextui-org/spinner';
-import {
-   getKeyValue,
-   SortDescriptor,
-   TableBody,
-   TableCell,
-   TableColumn,
-   TableHeader,
-   Table as TableNextUI,
-   TableProps,
-   TableRow,
-} from '@nextui-org/table';
-
-import { useIsomorphicLayoutEffect } from '@/hooks';
-import { cn } from '@/utils';
+import { useIsomorphicLayoutEffect } from '^/hooks';
 
 export type TColumn = {
-   key: string;
-   label: string;
-   className?: string;
-   sortable?: boolean;
-   align?: 'left' | 'right' | 'center';
-   shouldFontCurrency?: boolean;
+  key: string;
+  label: string;
+  className?: string;
+  sortable?: boolean;
+  align?: 'left' | 'right' | 'center';
+  shouldFontCurrency?: boolean;
 };
 
 interface Props<T> extends TableProps {
-   ariaLabel?: string;
-   columns: TColumn[];
-   items: T[];
-   isLoading?: boolean;
-   renderCell?: (item: T, key: React.Key) => React.ReactNode;
-   pagination?: {
-      page: number;
-      total: number;
-      setPage: (page: number) => void;
-      rowsPerPage?: number;
-      offsetPage?: number;
-      prefetch?: (page: number) => void;
-   };
+  ariaLabel?: string;
+  columns: TColumn[];
+  items: T[];
+  isLoading?: boolean;
+  renderCell?: (item: T, key: React.Key) => React.ReactNode;
+  pagination?: {
+    page: number;
+    total: number;
+    setPage: (page: number) => void;
+    rowsPerPage?: number;
+    offsetPage?: number;
+    prefetch?: (page: number) => void;
+  };
 }
 
 export function Table<T>({
-   columns,
-   items,
-   renderCell,
-   ariaLabel,
-   isLoading,
-   pagination,
-   bottomContent: bottomContentLeft,
-   ...props
+  columns,
+  items,
+  renderCell,
+  ariaLabel,
+  isLoading,
+  pagination,
+  bottomContent: bottomContentLeft,
+  ...props
 }: Props<T>) {
-   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({});
-   const page = pagination?.page || 0;
-   const limit = pagination?.rowsPerPage || 0;
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({});
+  const page = pagination?.page || 0;
+  const limit = pagination?.rowsPerPage || 0;
 
-   const pages = useMemo(() => Math.ceil(pagination?.total! / limit), [limit, pagination?.total]);
+  const pages = useMemo(() => Math.ceil(pagination?.total! / limit), [limit, pagination?.total]);
 
-   const bottomContent = useMemo(
-      () => (
-         <div className="flex items-center justify-between">
-            {bottomContentLeft}
-            {pages > 0 ? (
-               <div className="flex w-full justify-end">
-                  <Pagination
-                     showControls
-                     page={page}
-                     total={pages}
-                     size="sm"
-                     onChange={pagination!.setPage}
-                     isDisabled={isLoading}
-                  />
-               </div>
-            ) : null}
-         </div>
-      ),
-      [bottomContentLeft, isLoading, page, pages, pagination],
-   );
+  const bottomContent = useMemo(
+    () => (
+      <div className="flex items-center justify-between">
+        {bottomContentLeft}
+        {pages > 0 ? (
+          <div className="flex w-full justify-end">
+            <Pagination
+              showControls
+              page={page}
+              total={pages}
+              size="sm"
+              onChange={pagination!.setPage}
+              isDisabled={isLoading}
+            />
+          </div>
+        ) : null}
+      </div>
+    ),
+    [bottomContentLeft, isLoading, page, pages, pagination],
+  );
 
-   const loadingState = useMemo(() => (isLoading ? 'loading' : 'idle'), [isLoading]);
+  const loadingState = useMemo(() => (isLoading ? 'loading' : 'idle'), [isLoading]);
 
-   useIsomorphicLayoutEffect(() => {
-      if (page && pagination?.prefetch) {
-         pagination.prefetch(page);
-      }
-   }, [page, pagination]);
+  useIsomorphicLayoutEffect(() => {
+    if (page && pagination?.prefetch) {
+      pagination.prefetch(page);
+    }
+  }, [page, pagination]);
 
-   return (
-      <TableNextUI
-         aria-label={ariaLabel || 'Table'}
-         sortDescriptor={sortDescriptor}
-         onSortChange={setSortDescriptor}
-         bottomContent={bottomContent}
-         classNames={{ tbody: cn('divide-y-[0.5px] divide-divider') }}
-         {...props}>
-         <TableHeader>
-            {columns.map((column, index) => (
-               <TableColumn
-                  // {...(columns.length - 1 !== index &&
-                  //    items?.length > 1 && {
-                  //       allowsSorting: true,
-                  //    })}
-                  allowsSorting={column.sortable}
-                  className={cn(
-                     'last:text-right',
-                     // 'bg-inherit text-tiny font-normal first:pl-0 last:pr-0 last:text-right',
-                     column.align === 'right' && 'text-right',
-                     column.align === 'center' && 'text-center',
-                     column.align === 'left' && 'text-left',
-                  )}
-                  key={column.key}>
-                  {column.label}
-               </TableColumn>
-            ))}
-         </TableHeader>
-         <TableBody
-            items={items.map((e, i) => ({ ...e, _index: i })) ?? []}
-            loadingContent={
-               <Spinner
-                  size="lg"
-                  label="Fetching..."
-                  labelColor="primary"
-               />
-            }
-            loadingState={loadingState}
-            emptyContent={'Data not found'}>
-            {item => (
-               <TableRow key={item._index}>
-                  {columnKey => {
-                     const _column = columns.find(e => e.key === columnKey);
-                     const shouldAlign = _column?.align;
-                     // const shouldFontCurrency = _column?.shouldFontCurrency;
-                     const className = _column?.className;
-                     return (
-                        <TableCell
-                           className={cn(
-                              'last:text-right',
-                              // shouldFontCurrency && 'font-currency',
-                              shouldAlign && `text-${shouldAlign}`,
-                              className,
-                           )}>
-                           {renderCell ? renderCell(item, columnKey) : getKeyValue(item, columnKey)}
-                        </TableCell>
-                     );
-                  }}
-               </TableRow>
+  return (
+    <TableNextUI
+      aria-label={ariaLabel || 'Table'}
+      sortDescriptor={sortDescriptor}
+      onSortChange={setSortDescriptor}
+      bottomContent={bottomContent}
+      classNames={{ tbody: cn('divide-y-[0.5px] divide-divider') }}
+      {...props}>
+      <TableHeader>
+        {columns.map((column, index) => (
+          <TableColumn
+            // {...(columns.length - 1 !== index &&
+            //    items?.length > 1 && {
+            //       allowsSorting: true,
+            //    })}
+            allowsSorting={column.sortable}
+            className={cn(
+              'last:text-right',
+              // 'bg-inherit text-tiny font-normal first:pl-0 last:pr-0 last:text-right',
+              column.align === 'right' && 'text-right',
+              column.align === 'center' && 'text-center',
+              column.align === 'left' && 'text-left',
             )}
-         </TableBody>
-      </TableNextUI>
-   );
+            key={column.key}>
+            {column.label}
+          </TableColumn>
+        ))}
+      </TableHeader>
+      <TableBody
+        items={items.map((e, i) => ({ ...e, _index: i })) ?? []}
+        loadingContent={
+          <div className="relative z-50 grid place-items-center">
+            <Spinner size="lg" label="Fetching..." labelColor="primary" />
+          </div>
+        }
+        loadingState={loadingState}
+        emptyContent={'Data not found'}>
+        {item => (
+          <TableRow key={item._index}>
+            {columnKey => {
+              const _column = columns.find(e => e.key === columnKey);
+              const shouldAlign = _column?.align;
+              // const shouldFontCurrency = _column?.shouldFontCurrency;
+              const className = _column?.className;
+              return (
+                <TableCell
+                  className={cn(
+                    'last:text-right',
+                    // shouldFontCurrency && 'font-currency',
+                    shouldAlign && `text-${shouldAlign}`,
+                    className,
+                  )}>
+                  {renderCell ? renderCell(item, columnKey) : getKeyValue(item, columnKey)}
+                </TableCell>
+              );
+            }}
+          </TableRow>
+        )}
+      </TableBody>
+    </TableNextUI>
+  );
 }

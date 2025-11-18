@@ -8,17 +8,17 @@ import BigNumber from 'bignumber.js';
  * @returns The formatted cryptocurrency value as a string.
  */
 export function formatCrypto(value: number | string, precision: number) {
-   const multiplier = new BigNumber(10).pow(precision);
-   const truncatedValue = new BigNumber(value)
-      .times(multiplier)
-      .integerValue(BigNumber.ROUND_FLOOR)
-      .div(multiplier);
+  const multiplier = new BigNumber(10).pow(precision);
+  const truncatedValue = new BigNumber(value)
+    .times(multiplier)
+    .integerValue(BigNumber.ROUND_FLOOR)
+    .div(multiplier);
 
-   return (
-      truncatedValue.toFormat(0, BigNumber.ROUND_FLOOR) +
-      '.' +
-      truncatedValue.toFixed(precision).split('.')[1]
-   );
+  return (
+    truncatedValue.toFormat(0, BigNumber.ROUND_FLOOR) +
+    '.' +
+    truncatedValue.toFixed(precision).split('.')[1]
+  );
 
-   // return truncatedValue.toFixed(precision);
+  // return truncatedValue.toFixed(precision);
 }

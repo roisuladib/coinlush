@@ -1,14 +1,14 @@
-import { MarketDetail } from '@/types';
+import type { MarketDetail } from '^/types';
 
 export async function fetchMarketDetail(
-   id: string,
-   timePeriode: '3h' | '24h' | '7d' | '30d' | '3m' | '1y' | '3y' | '5y' = '24h',
-   referenceCurrencyUuid = 'ETQIOVR_rqox',
+  id: string,
+  timePeriode: '3h' | '24h' | '7d' | '30d' | '3m' | '1y' | '3y' | '5y' = '24h',
+  referenceCurrencyUuid = 'ETQIOVR_rqox',
 ) {
-   const res = await fetch(
-      `/api/coins/${id}?referenceCurrencyUuid=${referenceCurrencyUuid}&timePeriod=${timePeriode}`,
-   );
-   const data = await res.json();
+  const res = await fetch(
+    `/api/coin/${id}?referenceCurrencyUuid=${referenceCurrencyUuid}&timePeriod=${timePeriode}`,
+  );
+  const data = await res.json();
 
-   return data as MarketDetail;
+  return data as MarketDetail;
 }
