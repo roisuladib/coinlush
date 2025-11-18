@@ -140,7 +140,7 @@ const locales = [
 export type Locale = (typeof locales)[number]['code'];
 
 export function formatCurrency(
-  value: number | string,
+  value: number | string | null,
   locale: Locale = 'id-ID',
   currencyCode = 'IDR',
 ) {

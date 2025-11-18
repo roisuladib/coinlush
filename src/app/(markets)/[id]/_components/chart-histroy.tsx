@@ -62,7 +62,7 @@ export default function ChartHistroy({ uuid }: { uuid: string }) {
           plugins: {
             tooltip: {
               callbacks: {
-                label: ctx => formatCurrency(ctx.parsed.y || 0),
+                label: ctx => formatCurrency(ctx.parsed.y),
               },
               displayColors: false,
               padding: 4,
