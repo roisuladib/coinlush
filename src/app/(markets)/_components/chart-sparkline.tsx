@@ -134,12 +134,11 @@ export default function ChartSparkline({ data, variant }: Props) {
       <canvas ref={canvasRef} width={120} height={56} />
       {tooltip.visible && (
         <div
-          className="pointer-events-none fixed z-50 rounded-small border px-2 py-1.5 font-bold text-tiny shadow-black/10 shadow-md"
+          className="pointer-events-none fixed z-50 rounded-small border bg-foreground px-2 py-1.5 font-bold text-tiny shadow-black/10 shadow-md"
           style={{
             left: `${tooltip.x}px`,
             top: `${tooltip.y}px`,
             transform: 'translate(-50%, 0)',
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
             borderColor: variant === 'up' ? colorUp(0.3) : colorDown(0.3),
             color: variant === 'up' ? colorUp() : colorDown(),
           }}>
@@ -148,10 +147,7 @@ export default function ChartSparkline({ data, variant }: Props) {
             className="-bottom-1.5 -translate-x-1/2 absolute left-1/2 h-0 w-0 border-t-[6px] border-r-[6px] border-r-transparent border-l-[6px] border-l-transparent"
             style={{ borderTopColor: variant === 'up' ? colorUp(0.3) : colorDown(0.3) }}
           />
-          <div
-            className="-bottom-[5px] -translate-x-1/2 absolute left-1/2 h-0 w-0 border-t-[5px] border-r-[5px] border-r-transparent border-l-[5px] border-l-transparent"
-            style={{ borderTopColor: 'rgba(255, 255, 255, 0.95)', }}
-          />
+          <div className="-bottom-[5px] -translate-x-1/2 absolute left-1/2 h-0 w-0 border-t-[5px] border-t-foreground border-r-[5px] border-r-transparent border-l-[5px] border-l-transparent" />
         </div>
       )}
     </div>

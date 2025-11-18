@@ -12,6 +12,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from 'next-themes';
 
 interface Props extends Children {
+  currency: string;
   themeProps?: Omit<ThemeProviderProps, 'children'>;
 }
 
@@ -45,13 +46,15 @@ function getQueryClient() {
   }
 }
 
-export default function Providers({ children, themeProps }: Props) {
+export default function Providers({ children, currency, themeProps }: Props) {
   // NOTE: Avoid useState when initializing the query client if you don't
   //       have a suspense boundary between this and the code that may
   //       suspend because React will throw away the client on the initial
   //       render if it suspends and there is no boundary
   const queryClient = getQueryClient();
   const router = useRouter();
+
+  console.log('currency :>> ', currency);
 
   return (
     <QueryClientProvider client={queryClient}>

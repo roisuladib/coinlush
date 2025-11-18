@@ -15,7 +15,7 @@ export default async function Markets() {
         offset: 0,
         orderBy: 'marketCap',
         orderDirection: 'desc',
-        referenceCurrencyUuid: 'ETQIOVR_rqox',
+        referenceCurrencyUuid: 'yhjMzLPhuIDl',
         timePeriod: '24h',
         tiers: [1, 2],
       }),

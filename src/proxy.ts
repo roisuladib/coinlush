@@ -36,14 +36,8 @@ export default function proxy(request: NextRequest) {
   // Normal response
   const response = NextResponse.next();
 
-  response.cookies.set({
-    name: 'currency',
-    value: currency,
-    httpOnly: true,
-    maxAge: 60 * 60 * 24 * 180,
-    sameSite: 'strict',
-    secure: true
-  })
+  response.headers.set('x-currency', currency);
+
 
   if (isAllowed) {
     response.headers.set('Access-Control-Allow-Origin', origin);

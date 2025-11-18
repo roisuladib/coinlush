@@ -15,7 +15,7 @@ const config: NextConfig = {
         hostname: 's2.coinmarketcap.com',
       },
     ],
-  }
+  },
 };
 
 export default config;

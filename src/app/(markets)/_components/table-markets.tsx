@@ -82,7 +82,7 @@ export default function TableMarkets() {
           offset: page * getLimit,
           orderBy: getRanking,
           orderDirection: 'desc',
-          referenceCurrencyUuid: 'ETQIOVR_rqox',
+          referenceCurrencyUuid: 'yhjMzLPhuIDl',
           timePeriod: getTimePeriod,
           tiers: [1, 2],
         }),

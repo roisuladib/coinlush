@@ -2,6 +2,8 @@ import '^/styles/globals.css';
 
 import type { Metadata } from 'next';
 
+import { headers } from 'next/headers';
+
 import { cn } from '@heroui/theme';
 
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -80,11 +82,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({ children }: Readonly<Children>) {
+  const headerFunc = await headers();
+  const currency = headerFunc.get('x-currency') || 'USD';
+
   return (
     <html suppressHydrationWarning lang="en">
       {process.env.NODE_ENV === 'production' && (
@@ -99,7 +100,7 @@ export default function RootLayout({
           font.mono.variable,
         )}>
         <ProgressBar />
-        <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
+        <Providers currency={currency} themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <Header />
           <main className="mx-auto w-full max-w-7xl grow px-4 py-16 lg:px-10">
             {process.env.NODE_ENV === 'production' && (
