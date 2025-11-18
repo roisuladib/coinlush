@@ -57,9 +57,7 @@ export default function ChartSparkline({ data, variant }: Props) {
                 const chart = ctx.chart;
                 const { chartArea } = chart;
 
-                if (!chartArea) {
-                  return;
-                }
+                if (!chartArea) return;
 
                 const gradient = chart.ctx.createLinearGradient(
                   0,
@@ -89,12 +87,8 @@ export default function ChartSparkline({ data, variant }: Props) {
           ],
         },
         options: {
-          responsive: true,
+          responsive: false,
           maintainAspectRatio: false,
-          interaction: {
-            intersect: false,
-            mode: 'index',
-          },
           plugins: {
             tooltip: {
               enabled: false,
@@ -112,7 +106,7 @@ export default function ChartSparkline({ data, variant }: Props) {
                 setTooltip({
                   visible: true,
                   x: position.left + tooltipModel.caretX,
-                  y: position.top + tooltipModel.caretY - 40,
+                  y: position.top + tooltipModel.caretY - 45,
                   value: formatCurrency(value),
                 });
               },
@@ -136,11 +130,11 @@ export default function ChartSparkline({ data, variant }: Props) {
   }, [data, variant]);
 
   return (
-    <div className="relative h-14 w-20">
-      <canvas ref={canvasRef} className="h-full w-full" />
+    <div className="relative">
+      <canvas ref={canvasRef} width={120} height={56} />
       {tooltip.visible && (
         <div
-          className="pointer-events-none fixed z-50 rounded-sm border px-2 py-1 font-bold text-tiny shadow-black/10 shadow-md"
+          className="pointer-events-none fixed z-50 rounded-small border px-2 py-1.5 font-bold text-tiny shadow-black/10 shadow-md"
           style={{
             left: `${tooltip.x}px`,
             top: `${tooltip.y}px`,
@@ -150,6 +144,14 @@ export default function ChartSparkline({ data, variant }: Props) {
             color: variant === 'up' ? colorUp() : colorDown(),
           }}>
           {tooltip.value}
+          <div
+            className="-bottom-1.5 -translate-x-1/2 absolute left-1/2 h-0 w-0 border-t-[6px] border-r-[6px] border-r-transparent border-l-[6px] border-l-transparent"
+            style={{ borderTopColor: variant === 'up' ? colorUp(0.3) : colorDown(0.3) }}
+          />
+          <div
+            className="-bottom-[5px] -translate-x-1/2 absolute left-1/2 h-0 w-0 border-t-[5px] border-r-[5px] border-r-transparent border-l-[5px] border-l-transparent"
+            style={{ borderTopColor: 'rgba(255, 255, 255, 0.95)', }}
+          />
         </div>
       )}
     </div>
