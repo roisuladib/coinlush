@@ -218,7 +218,7 @@ export default function TableMarkets() {
               labelPlacement="outside"
               size="sm"
               selectedKeys={timePeroid}
-              onSelectionChange={setTimePeriod}
+              onSelectionChange={e => setTimePeriod(e as Iterable<(typeof timePeriods)[number]>)}
               className="max-w-20">
               {timePeriods.map(e => (
                 <SelectItem key={e}>{e}</SelectItem>

@@ -54,11 +54,12 @@ export function Table<T>({
   bottomContent: bottomContentLeft,
   ...props
 }: Props<T>) {
-  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({});
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>();
   const page = pagination?.page || 0;
   const limit = pagination?.rowsPerPage || 0;
+  const total = pagination?.total || 0;
 
-  const pages = useMemo(() => Math.ceil(pagination?.total! / limit), [limit, pagination?.total]);
+  const pages = useMemo(() => Math.ceil(total / limit), [limit, total]);
 
   const bottomContent = useMemo(
     () => (
