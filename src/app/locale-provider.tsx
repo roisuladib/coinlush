@@ -8,15 +8,23 @@ import { addToast } from '@heroui/toast';
 import { useQuery } from '@tanstack/react-query';
 
 import { CustomModal } from '^/components';
-import { fetchCurrencyID, getCountryData,  setCurrency } from '^/lib';
+import { fetchCurrencyID, getCountryData, setCurrency } from '^/lib';
 
-export default function LocaleProvider({ locale, hasChosen }: { locale: string; hasChosen: boolean; }) {
+export default function LocaleProvider({
+  locale,
+  hasChosen,
+}: {
+  locale: string;
+  hasChosen: boolean;
+}) {
   const currencyData = getCountryData(locale);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { isPending, data } = useQuery({
     ...fetchCurrencyID({ search: currencyData.currency }),
     enabled: isOpen,
   });
+
+  console.log('currencyData :>> ', { currencyData, locale, hasChosen });
 
   useEffect(() => {
     const isNotUSD = currencyData.currency !== 'USD';

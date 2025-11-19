@@ -102,7 +102,10 @@ export default async function RootLayout({ children }: Readonly<Children>) {
           font.mono.variable,
         )}>
         <ProgressBar />
-        <Providers locale={locale} hasChosen={hasChosen} themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
+        <Providers
+          locale={locale}
+          hasChosen={hasChosen}
+          themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <Header />
           <main className="mx-auto w-full max-w-7xl grow px-4 py-16 lg:px-10">
             {process.env.NODE_ENV === 'production' && (
