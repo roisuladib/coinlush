@@ -18,22 +18,15 @@ export default function LocaleProvider({
   hasChosen: boolean;
 }) {
   const currencyData = getCountryData(locale);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { onOpenChange } = useDisclosure();
+  const isOpen = !hasChosen && currencyData.currency !== 'USD'
+
   const { isPending, data } = useQuery({
     ...fetchCurrencyID({ search: currencyData.currency }),
     enabled: isOpen,
   });
 
   console.log('currencyData :>> ', { currencyData, locale, hasChosen });
-
-  useEffect(() => {
-    const isNotUSD = currencyData.currency !== 'USD';
-
-    if (!hasChosen && isNotUSD) {
-      console.log('OPEN MODAL');
-      onOpen();
-    }
-  }, [currencyData.currency, hasChosen, onOpen]);
 
   const isAvailable = !isPending && data?.data.stats.total === 1;
 
@@ -42,23 +35,27 @@ export default function LocaleProvider({
     : data?.data.currencies.find(e => e.symbol === currencyData.currency);
 
   const handleSteCurrency = async (value: string, onClose: () => void) => {
-    await setCurrency(value);
-    onClose();
-    addToast({
-      color: 'success',
-      description: `Currency preference updated to ${currency?.name}`,
-    });
+    try {
+      await setCurrency(value);
+      onClose();
+      addToast({
+        color: 'success',
+        description: `Currency preference updated to ${currency?.name}`,
+      });
+    } catch (error) {
+      console.error('Failed to set currency:', error);
+      addToast({
+        color: 'danger',
+        description: 'Failed to update currency preference',
+      });
+    }
   };
 
-  // if (!isPending && currencyData.currency) {
-  //   return (
-  //   );
-  // }
-
-  return (
+  if (isOpen) {
+    return (
     <CustomModal
       title="Use Local Currency?"
-      isOpen={isOpen}
+      defaultOpen
       onOpenChange={onOpenChange}
       size="sm"
       isDismissable={false}
@@ -92,5 +89,6 @@ export default function LocaleProvider({
         </>
       )}
     </CustomModal>
-  );
+    );
+  }
 }
