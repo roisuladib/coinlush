@@ -2,7 +2,7 @@ import '^/styles/globals.css';
 
 import type { Metadata } from 'next';
 
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 
 import { cn } from '@heroui/theme';
 
@@ -84,7 +84,9 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: Readonly<Children>) {
   const headerFunc = await headers();
-  const locale = headerFunc.get('x-locale') || 'US';
+  const cookiesFunc = await cookies();
+  const locale = headerFunc.get('x-vercel-ip-country') || 'US';
+  const hasChosen = cookiesFunc.get('currencyChosen')?.value === 'true';
 
   return (
     <html suppressHydrationWarning lang="en">
@@ -100,7 +102,7 @@ export default async function RootLayout({ children }: Readonly<Children>) {
           font.mono.variable,
         )}>
         <ProgressBar />
-        <Providers locale={locale} themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
+        <Providers locale={locale} hasChosen={hasChosen} themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <Header />
           <main className="mx-auto w-full max-w-7xl grow px-4 py-16 lg:px-10">
             {process.env.NODE_ENV === 'production' && (

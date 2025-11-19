@@ -162,7 +162,7 @@ export default function TableMarkets() {
               isIconOnly
               as={Link}
               size="sm"
-              href={`/${market.uuid}`}>
+              href={`/coins/${market.uuid}`}>
               <LineChart className="size-5" />
             </Button>
           </Tooltip>

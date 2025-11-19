@@ -15,6 +15,7 @@ import LocaleProvider from './locale-provider';
 
 interface Props extends Children {
   locale: string;
+  hasChosen: boolean;
   themeProps?: Omit<ThemeProviderProps, 'children'>;
 }
 
@@ -48,7 +49,7 @@ function getQueryClient() {
   }
 }
 
-export default function Providers({ children, locale, themeProps }: Props) {
+export default function Providers({ children, locale, hasChosen, themeProps }: Props) {
   // NOTE: Avoid useState when initializing the query client if you don't
   //       have a suspense boundary between this and the code that may
   //       suspend because React will throw away the client on the initial
@@ -63,7 +64,7 @@ export default function Providers({ children, locale, themeProps }: Props) {
         navigate={path => router.push(path)}>
         <ToastProvider placement="top-center" />
         <ThemeProvider {...themeProps}>
-          <LocaleProvider locale={locale} />
+          <LocaleProvider locale={locale} hasChosen={hasChosen} />
           {children}
         </ThemeProvider>
       </HeroUIProvider>

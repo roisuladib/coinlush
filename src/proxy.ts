@@ -14,8 +14,6 @@ export default function proxy(request: NextRequest) {
   const origin = request.headers.get('origin') ?? '';
   const isAllowed = allowedOrigins.includes(origin);
 
-  const locale = request.headers.get('x-vercel-ip-country') || 'US';
-
   // Preflight
   if (request.method === 'OPTIONS') {
     return new Response(null, {
@@ -32,8 +30,6 @@ export default function proxy(request: NextRequest) {
 
   // Normal response
   const response = NextResponse.next();
-
-  response.headers.set('x-locale', locale);
 
   if (isAllowed) {
     response.headers.set('Access-Control-Allow-Origin', origin);

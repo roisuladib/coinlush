@@ -43,7 +43,7 @@ export const Header = () => {
       </NavbarBrand>
       <NavbarContent justify="end">
         <NavbarItem isActive>
-          <Link href="/">Coins</Link>
+          <Link href="/coins">Coins</Link>
         </NavbarItem>
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
         <NavbarItem>
