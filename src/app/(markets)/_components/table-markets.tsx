@@ -19,7 +19,7 @@ import ChartSparkline from './chart-sparkline';
 import { LineChart, Table, type TColumn } from '^/components';
 import { ROWS_PER_PAGE } from '^/constants';
 import { fetchCoins, rankings, timePeriods } from '^/lib';
-import { formatCurrency } from '^/utils';
+import { formatCurrency, humanize } from '^/utils';
 
 const columns: TColumn[] = [
   {
@@ -74,19 +74,16 @@ export default function TableMarkets() {
   const getLimit = useMemo(() => new Set(limit).values().next().value as number, [limit]);
 
   const fetchQueryOptions = useMemo<FetchQueryOptions<Market>>(
-    () => ({
-      queryKey: ['markets', page, getLimit, getTimePeriod, getRanking],
-      queryFn: () =>
-        fetchCoins({
-          limit: getLimit,
-          offset: page * getLimit,
-          orderBy: getRanking,
-          orderDirection: 'desc',
-          referenceCurrencyUuid: 'yhjMzLPhuIDl',
-          timePeriod: getTimePeriod,
-          tiers: [1, 2],
-        }),
-    }),
+    () =>
+      fetchCoins({
+        limit: getLimit,
+        offset: page * getLimit,
+        orderBy: getRanking,
+        orderDirection: 'desc',
+        referenceCurrencyUuid: 'yhjMzLPhuIDl',
+        timePeriod: getTimePeriod,
+        tiers: [1, 2],
+      }),
     [page, getLimit, getTimePeriod, getRanking],
   );
 
@@ -201,7 +198,7 @@ export default function TableMarkets() {
             <Select
               label="Ranking"
               labelPlacement="outside"
-              items={rankings.map(e => ({ key: e, label: e }))}
+              items={rankings.map(e => ({ key: e, label: humanize(e) }))}
               size="sm"
               selectedKeys={ranking}
               onSelectionChange={setRanking}

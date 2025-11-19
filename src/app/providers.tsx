@@ -11,10 +11,10 @@ import { isServer, QueryClient, QueryClientProvider } from '@tanstack/react-quer
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from 'next-themes';
 
-import CurrencyProvider from './currency-provider';
+import LocaleProvider from './locale-provider';
 
 interface Props extends Children {
-  currency: string;
+  locale: string;
   themeProps?: Omit<ThemeProviderProps, 'children'>;
 }
 
@@ -48,7 +48,7 @@ function getQueryClient() {
   }
 }
 
-export default function Providers({ children, currency, themeProps }: Props) {
+export default function Providers({ children, locale, themeProps }: Props) {
   // NOTE: Avoid useState when initializing the query client if you don't
   //       have a suspense boundary between this and the code that may
   //       suspend because React will throw away the client on the initial
@@ -63,7 +63,7 @@ export default function Providers({ children, currency, themeProps }: Props) {
         navigate={path => router.push(path)}>
         <ToastProvider placement="top-center" />
         <ThemeProvider {...themeProps}>
-          <CurrencyProvider currency={currency} />
+          <LocaleProvider locale={locale} />
           {children}
         </ThemeProvider>
       </HeroUIProvider>

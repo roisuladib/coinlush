@@ -8,6 +8,7 @@ export function stringifyArray(key: string, values: QueryArray): string {
   return values
     .filter(v => v != null && v !== '')
     .map(v => `${key}[]=${encodeURIComponent(String(v))}`)
+    .sort()
     .join('&');
 }
 
@@ -23,5 +24,6 @@ export function stringify(obj: QueryObject | null | undefined): string {
       return `${key}=${encodeURIComponent(String(value))}`;
     })
     .filter(Boolean)
+    .sort()
     .join('&');
 }

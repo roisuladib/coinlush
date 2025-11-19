@@ -2,8 +2,6 @@ import type { NextRequest } from 'next/server';
 
 import { NextResponse } from 'next/server';
 
-import { getCurrency } from 'locale-currency';
-
 const PROD_URL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null;
 
 const allowedOrigins: string[] = [];
@@ -17,7 +15,6 @@ export default function proxy(request: NextRequest) {
   const isAllowed = allowedOrigins.includes(origin);
 
   const locale = request.headers.get('x-vercel-ip-country') || 'US';
-  const currency = getCurrency(locale) || 'USD';
 
   // Preflight
   if (request.method === 'OPTIONS') {
@@ -36,7 +33,7 @@ export default function proxy(request: NextRequest) {
   // Normal response
   const response = NextResponse.next();
 
-  response.headers.set('x-currency', currency);
+  response.headers.set('x-locale', locale);
 
   if (isAllowed) {
     response.headers.set('Access-Control-Allow-Origin', origin);

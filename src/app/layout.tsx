@@ -84,7 +84,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: Readonly<Children>) {
   const headerFunc = await headers();
-  const currency = headerFunc.get('x-currency') || 'USD';
+  const locale = headerFunc.get('x-locale') || 'US';
 
   return (
     <html suppressHydrationWarning lang="en">
@@ -100,7 +100,7 @@ export default async function RootLayout({ children }: Readonly<Children>) {
           font.mono.variable,
         )}>
         <ProgressBar />
-        <Providers currency={currency} themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
+        <Providers locale={locale} themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <Header />
           <main className="mx-auto w-full max-w-7xl grow px-4 py-16 lg:px-10">
             {process.env.NODE_ENV === 'production' && (

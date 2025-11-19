@@ -13,3 +13,8 @@ export async function setCurrency(currency: string) {
     secure: true,
   });
 }
+
+export async function getCurrency() {
+  const cookiesFunc = await cookies();
+  return cookiesFunc.get('currency')?.value || 'USD';
+}

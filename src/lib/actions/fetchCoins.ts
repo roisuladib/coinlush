@@ -1,5 +1,8 @@
 import type { Market } from '^/types';
 
+import { queryOptions } from '@tanstack/react-query';
+
+import { ROWS_PER_PAGE } from '^/constants';
 import { qs } from '^/utils';
 
 export const timePeriods = ['1h', '3h', '12h', '24h', '7d', '30d', '3m', '1y', '3y', '5y'] as const;
@@ -171,9 +174,24 @@ export type QueryCoin = {
   minVolume?: number;
 };
 
-export async function fetchCoins(query?: QueryCoin) {
-  const res = await fetch(`/api/coins?${qs.stringify(query)}`);
-  const data = await res.json();
+export function fetchCoins(query?: QueryCoin) {
+  const defaultQuery: QueryCoin = {
+    limit: ROWS_PER_PAGE,
+    offset: 0,
+    orderBy: 'marketCap',
+    orderDirection: 'desc',
+    referenceCurrencyUuid: 'yhjMzLPhuIDl',
+    timePeriod: '24h',
+    tiers: [1, 2],
+  };
 
-  return data as Market;
+  const queryKey = qs.stringify({
+    ...defaultQuery,
+    ...(query ?? {}),
+  });
+
+  return queryOptions<Market, Error, QueryCoin>({
+    queryKey: ['coins', queryKey],
+    queryFn: () => fetch(`/api/coins?${queryKey}`).then(res => res.json()),
+  });
 }

@@ -53,3 +53,17 @@ export type MarketDetail = ResponseData<{
   coin: Coin;
 }>;
 // END MARKETS
+
+export type Currency = {
+  uuid: string;
+  type: 'fiat' | 'coin';
+  iconUrl: string;
+  name: string;
+  symbol: string;
+  sign: string;
+};
+
+export type ReferenceCurrency = ResponseData<{
+  stats: Pick<Stats, 'total'>;
+  currencies: Currency[];
+}>;

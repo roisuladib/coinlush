@@ -1,25 +1,12 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 import TableMarkets from './_components/table-markets';
-import { ROWS_PER_PAGE } from '^/constants';
 import { fetchCoins, getQueryClient } from '^/lib';
 
 const queryClient = getQueryClient();
 
 export default async function Markets() {
-  await queryClient.prefetchQuery({
-    queryKey: ['markets', 0, ROWS_PER_PAGE, '24h', 'marketCap'],
-    queryFn: () =>
-      fetchCoins({
-        limit: ROWS_PER_PAGE,
-        offset: 0,
-        orderBy: 'marketCap',
-        orderDirection: 'desc',
-        referenceCurrencyUuid: 'yhjMzLPhuIDl',
-        timePeriod: '24h',
-        tiers: [1, 2],
-      }),
-  });
+  await queryClient.prefetchQuery(fetchCoins());
   const dehydratedState = dehydrate(queryClient);
 
   return (
