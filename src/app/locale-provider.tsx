@@ -30,6 +30,7 @@ export default function LocaleProvider({
     const isNotUSD = currencyData.currency !== 'USD';
 
     if (!hasChosen && isNotUSD) {
+      console.log('OPEN MODAL');
       onOpen();
     }
   }, [currencyData.currency, hasChosen, onOpen]);
