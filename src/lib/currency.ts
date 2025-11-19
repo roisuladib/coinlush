@@ -4,7 +4,7 @@ import type { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 
 import { cookies } from 'next/headers';
 
-export async function setCurrency(currency: string) {
+export async function setCurrency(currency: string, referenceCurrencyUuid?: string) {
   const cookiesFunc = await cookies();
 
   const defaultOptions: Partial<ResponseCookie> = {
@@ -20,13 +20,19 @@ export async function setCurrency(currency: string) {
     ...defaultOptions,
   });
 
+  if (referenceCurrencyUuid) {
+    cookiesFunc.set({
+      name: 'referenceCurrencyUuid',
+      value: referenceCurrencyUuid,
+      ...defaultOptions,
+    });
+  }
+
   cookiesFunc.set({
     name: 'currencyChosen',
     value: 'true',
     ...defaultOptions,
   });
-
-  return { success: true, currency };
 }
 
 export async function getCurrency() {
